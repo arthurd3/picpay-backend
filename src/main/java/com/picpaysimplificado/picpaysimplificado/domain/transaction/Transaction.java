@@ -22,8 +22,8 @@ public class Transaction {
     private BigDecimal amount;
 
     @ManyToOne
-    @JoinColumn(name = "sander_id")
-    private User sander;
+    @JoinColumn(name = "sender_id")
+    private User sender;
 
     @ManyToOne
     @JoinColumn(name = "receiver_id")

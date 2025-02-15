@@ -22,12 +22,15 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
     private RestTemplate restTemplate;
 
-    public void createTransaction(TransactionDTO transaction) throws Exception {
-        User sender = this.userService.findUserById(transaction.sanderId());
-        User receiver = this.userService.findUserById(transaction.receiverId());
+    @Autowired
+    private NotificationService notificationService;
 
+    public Transaction createTransaction(TransactionDTO transaction) throws Exception {
+        User sender = this.userService.findUserById(transaction.senderId());
+        User receiver = this.userService.findUserById(transaction.receiverId());
 
         userService.validateTransaction(sender , transaction.value());
 
@@ -39,7 +42,7 @@ public class TransactionService {
 
         Transaction newTransaction = new Transaction();
         newTransaction.setAmount(transaction.value());
-        newTransaction.setSander(sender);
+        newTransaction.setSender(sender);
         newTransaction.setReceiver(receiver);
         newTransaction.setTimestamp(LocalDateTime.now());
 
@@ -49,6 +52,12 @@ public class TransactionService {
         this.transactionRepository.save(newTransaction);
         this.userService.saveUser(sender);
         this.userService.saveUser(receiver);
+
+        this.notificationService.sendNotification(sender, "Transacao realizada com sucesso");
+        this.notificationService.sendNotification(receiver, "Transacao recebida com sucesso");
+
+
+        return newTransaction;
     }
 
     public boolean authenticateTransaction(User sender , BigDecimal value) throws Exception {
@@ -62,3 +71,4 @@ public class TransactionService {
 
     }
 }
+
