@@ -1,10 +1,6 @@
 package com.picpaysimplificado.picpaysimplificado.domain.user;
-
-
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.usertype.UserType;
-
 import java.math.BigDecimal;
 
 @Entity(name = "users")
